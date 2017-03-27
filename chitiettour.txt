@@ -1,0 +1,600 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@ taglib uri="http://struts.apache.org/tags-bean" prefix="bean" %>
+<%@ taglib uri="http://struts.apache.org/tags-html" prefix="html" %>
+<%@ taglib uri="http://struts.apache.org/tags-logic" prefix="logic" %>
+<%@ taglib uri="http://struts.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<html>
+<head>
+<title>Website qu?n lý tour du l?ch</title>
+<%@include file="thuVien.jsp" %>
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
+<!-- jQuery library -->
+<!-- Latest compiled JavaScript -->
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="js/star-rating.min.js"></script>
+<link rel="stylesheet" href="css/star-rating.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <style>
+.w3-button {height:50px;}
+.w3-button {width:Auto;
+}
+.bg{
+	height:400px;
+	width:1300px;
+	background-image:url(images/banner1.jpg);
+.mySlides {display:none}
+.w3-left, .w3-right, .w3-badge {cursor:pointer}
+.w3-badge {height:13px;width:13px;padding:0}
+}
+.w3-display-bottommiddle {
+
+	left: 42%;
+
+}
+body{
+		font-family: times new roman;
+	
+	}
+</style>
+<script type="text/javascript">
+			$(document).ready(function() {
+		        
+		        $( "#noidung" ).append( $( "#noidungbv" ).val() );
+		
+		 	});
+	
+	</script>
+<script type="text/javascript">
+	function getSoSao() {
+		var soSao = $("#rating-input").val();
+		document.getElementById("soSao").value = soSao;
+	}
+</script>
+<script src="js/jquery.validate.js"></script>
+<script type="text/javascript">
+	(function($, W, D) {
+		var JQUERY4U = {};
+
+		JQUERY4U.UTIL = {
+			setupFormValidation : function() {
+				//form validation rules
+				$("#fChiTietTour").validate({
+					rules : {
+						
+						noiDungBinhLuan : {
+							required : true,
+							
+						},
+						agree : "required"
+					},
+					submitHandler : function(form) {
+						form.submit();
+					}
+				});
+			}
+		}
+
+		//when the dom has loaded setup form validation rules
+		$(D).ready(function($) {
+			JQUERY4U.UTIL.setupFormValidation();
+		});
+
+	})(jQuery, window, document);
+	
+</script>
+<script>
+		var slideIndex = 1;
+		showDivs(slideIndex);
+		function plusDivs(n) {
+		  showDivs(slideIndex += n);
+		}
+		function currentDiv(n) {
+		  showDivs(slideIndex = n);
+		}
+		
+		function showDivs(n) {
+		  var i;
+		  var x = document.getElementsByClassName("mySlides");
+		  var dots = document.getElementsByClassName("demo");
+		  if (n > x.length) {slideIndex = 1}    
+		  if (n < 1) {slideIndex = x.length}
+		  for (i = 0; i < x.length; i++) {
+		     x[i].style.display = "none";  	
+		  }
+		  for (i = 0; i < dots.length; i++) {
+		     dots[i].className = dots[i].className.replace(" w3-white", "");
+		  }
+		  x[slideIndex-1].style.display = "block";   
+		  dots[slideIndex-1].className += " w3-white";
+		}
+		$(function(){
+		    $(':input').each(function(){
+		       $(this).attr("placeholder", this.id);
+		    });
+		});
+		</script>
+		<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&sensor=true&key=AIzaSyDa-JT08xt97W6UPBDoOzi34vEtkWLv-j4&callback=initMap" async defer></script>
+ <script type="text/javascript">
+var geocoder;
+var map;
+function initialize() {
+geocoder = new google.maps.Geocoder();
+var latlng = new google.maps.LatLng(-34.397, 150.644);
+var directionsService = new google.maps.DirectionsService;
+var directionsDisplay = new google.maps.DirectionsRenderer;
+var myOptions = {
+  zoom: 8,
+  center: latlng,
+  mapTypeId: google.maps.MapTypeId.ROADMAP
+}
+map = new google.maps.Map(document.getElementById("map"), myOptions);
+directionsDisplay.setMap(map);
+
+var onChangeHandler = function() {
+  calculateAndDisplayRoute(directionsService, directionsDisplay);
+};
+document.getElementById('start').addEventListener('change', onChangeHandler);
+document.getElementById('end').addEventListener('change', onChangeHandler);
+}
+function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+    directionsService.route({
+      origin: document.getElementById('start').value,
+      destination: document.getElementById('end').value,
+      travelMode: 'DRIVING'
+    }, function(response, status) {
+      if (status === 'OK') {
+        directionsDisplay.setDirections(response);
+      } else {
+        window.alert('Directions request failed due to ' + status);
+      }
+    });
+  }
+
+function codeAddress() {
+var address = document.getElementById("diemKhoiHanh").value;
+
+geocoder.geocode( { 'address': address}, function(results, status) {
+  if (status == google.maps.GeocoderStatus.OK) {
+    map.setCenter(results[0].geometry.location);
+    var marker = new google.maps.Marker({
+        map: map,
+        draggable: true,
+        position: results[0].geometry.location
+
+    });
+  } else {
+    alert("Geocode was not successful for the following reason: " + status);
+  }
+});
+var address1 = document.getElementById("diemDen").value;
+
+geocoder.geocode( { 'address1': address}, function(results, status) {
+  if (status == google.maps.GeocoderStatus.OK) {
+    map.setCenter(results[0].geometry.location);
+    var marker = new google.maps.Marker({
+        map: map,
+        draggable: true,
+        position: results[0].geometry.location
+
+    });
+  } else {
+    alert("Geocode was not successful for the following reason: " + status);
+  }
+});
+
+
+}
+function codeAddress1() {
+	var address = document.getElementById("diemDen").value;
+
+	geocoder.geocode( { 'address': address}, function(results, status) {
+	  if (status == google.maps.GeocoderStatus.OK) {
+	    map.setCenter(results[0].geometry.location);
+	    var marker = new google.maps.Marker({
+	        map: map,
+	        draggable: true,
+	        position: results[0].geometry.location
+
+	    });
+	  } else {
+	    alert("Geocode was not successful for the following reason: " + status);
+	  }
+	});
+
+
+	}
+function codeAddress2() {
+	var address = document.getElementById("diaDiem").value;
+
+	geocoder.geocode( { 'address': address}, function(results, status) {
+	  if (status == google.maps.GeocoderStatus.OK) {
+	    map.setCenter(results[0].geometry.location);
+	    var marker = new google.maps.Marker({
+	        map: map,
+	        draggable: true,
+	        position: results[0].geometry.location
+
+	    });
+	  } else {
+	    alert("Geocode was not successful for the following reason: " + status);
+	  }
+	});
+
+
+	}
+</script>  
+ <!-- <script>
+ var geocoder;
+      function initMap() {
+    geocoder = new google.maps.Geocoder();
+    var latlng = new google.maps.LatLng(-34.397, 150.644);
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 7,
+          center: {lat: 41.85, lng: -87.65}
+        });
+        directionsDisplay.setMap(map);
+
+        var onChangeHandler = function() {
+          calculateAndDisplayRoute(directionsService, directionsDisplay);
+        };
+        document.getElementById('start').addEventListener('change', onChangeHandler);
+        document.getElementById('end').addEventListener('change', onChangeHandler);
+      }
+      function codeAddress2() {
+  		var address = document.getElementById("diaDiem").value;
+
+  		geocoder.geocode( { 'address': address}, function(results, status) {
+  		  if (status == google.maps.GeocoderStatus.OK) {
+  		    map.setCenter(results[0].geometry.location);
+  		    var marker = new google.maps.Marker({
+  		        map: map,
+  		        draggable: true,
+  		        position: results[0].geometry.location
+
+  		    });
+  		  } else {
+  		    alert("Geocode was not successful for the following reason: " + status);
+  		  }
+  		});
+
+
+  		}
+      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+        directionsService.route({
+          origin: document.getElementById('start').value,
+          destination: document.getElementById('end').value,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+     
+      
+    </script> -->
+   <style type="text/css">
+#controls {
+position: absolute;
+bottom: 1em;
+left: 100px;
+width: 400px;
+z-index: 20000;
+padding: 0 0.5em 0.5em 0.5em;
+}
+ html, body, #map {
+            margin: 0;
+            width: 70%;
+            height: 70%;
+        }
+</style>
+  </head>
+<body  onload="initialize()">
+<div class="w3-container" style="font-family:Times new roman;" >
+
+	<div class="w3-container" >
+	 <div class="col-sm-3">
+		 <image src="images/Logo_VNtourism_Color_Vi_PNG.png" alt="#" width="150px" style=""/>
+		 </div>
+		
+			<div class=""  style="height:70px;font-family:Times new roman;background-image:url(images/abc.jpg) ;margin-left:300px;"></div>
+		
+			
+				 <div class=""></div>
+				  <h2 style="color:green;float:right"></h2>
+	</div>
+		<div class=" w3-border-green bd" style="border-bottom:2px solid;font-size:17px;">
+		<a href="login.html">  <button class="w3-button  w3-light-green w3-hover-green">Trang Ch?</button></a>
+		<html:link action="/danhmuctour?maDanhMuc=1"> <button class="w3-button  w3-light-green w3-hover-green">Tour Trong Nu?c</button></html:link>
+		<html:link action="/danhmuctour?maDanhMuc=2"> <button class="w3-button  w3-light-green w3-hover-green">Tour Ngoài Nu?c</button></html:link>
+		<html:link action="/danhmuctour?maDanhMuc=3"> <button class="w3-button  w3-light-green w3-hover-green">Tour Ngày L?</button></html:link>
+		<html:link action="/danhmuctour?maDanhMuc=4"> <button class="w3-button  w3-light-green w3-hover-green">Tour Khuy?n Mãi</button></html:link>
+<!-- equal -->
+		<logic:equal value="" property="tenDangNhap" name="danhSachTourDuLichForm">
+			 <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-green w3-large" style="float:right">Ðang Nh?p</button>
+			  <html:form action="dangKy.html" method="post" style="float:right;padding-right:5px;">
+			 <html:submit styleClass="w3-button w3-green w3-large" style="float:right">Ðang Ký </html:submit>
+			 </html:form>
+			  <div id="id01" class="w3-modal">
+			    <div class="w3-modal-content w3-card-8 w3-animate-zoom" style="max-width:600px">
+			      <div class="w3-center"><br>
+			        <span onclick="document.getElementById('id01').style.display='none'" class="w3-closebtn w3-hover-red w3-container w3-padding-8 w3-display-topright" title="Close Modal">×</span>
+			        <h1>Vui Lòng Ðang Nh?p Tài Kho?n</h1>
+			      </div>	
+			        <html:form action="/login" styleClass="w3-container" styleId ="formDangNhap">
+			        <div class="w3-section">
+			          <label><b>Tài Kho?n</b></label>
+			        	<html:text property="tenDangNhap" styleClass="w3-input w3-border w3-margin-bottom"  ></html:text>
+			          <label><b>M?t Kh?u</b></label>
+			         	<html:password property="matKhau" styleClass="w3-input w3-border w3-margin-bottom"></html:password>
+			  
+			          <button  class="w3-button w3-green" name="tuKhoa" value="dangNhap">Ðang Nh?p</button>
+			           <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+			          <input class="w3-check w3-margin-top" type="checkbox" checked="checked"> Remember me
+			        </div>
+			      </html:form>
+			      </div>
+			
+			    </div>	
+			  </logic:equal>   
+			  
+			 
+<!-- 			  	Not equal -->
+			  	 <logic:notEqual value="" property="tenDangNhap" name="danhSachTourDuLichForm">
+				<div class="dropdown w3-green"
+					style="height: 50px; float: right; ">
+					<a class=" dropdown-toggle" href="#" style="text-align: right;"
+						data-toggle="dropdown"><p style="text-align: center;padding-left: 5px;padding-right: 5px">
+							<p style="color:black;margin-top:5px;float:left;">Xin chào:
+							<bean:write name="danhSachTourDuLichForm" property="tenDangNhap" />
+							<span class="caret"></span></p>
+						</p></a>
+					<ul class="dropdown-menu">
+					<li><html:link action="thong-tin-ca-nhan.do">Thông tin c?a b?n</html:link></li>
+						<li><html:link action="dat-tour-khach-hang.do">Ðon d?t tour c?a b?n</html:link></li>
+						<li><html:link action="login.html?tuKhoa=dangXuat">Ðang xu?t</html:link></li>
+					</ul>
+				</div>
+			</logic:notEqual>
+			</div>	
+	 </div>
+		<!-- ------------------------------CHI TIET-------------- -->
+	
+	<div class="container" style="background: #f4f7f9;font-family: times new roman;padding-top:10px;" >
+	<div class="w3-row">
+		  <div id="map"></div>
+			<input type="button" value="Tìm ki?m di?m kh?i hành" onclick="codeAddress()">
+					<input type="button" value="Tìm ki?m di?m kh?i d?n" onclick="codeAddress1()">
+					<input type="text" value="" id="diaDiem" />
+					<input type="button" value="Tìm ki?m Ð?a Ði?m C?a B?n" onclick="codeAddress2()">
+		<div class="w3-col m12 l12">
+			<div style="width:750px;float:left;">
+				
+			<logic:present name="danhsachtourForm">
+			
+			<logic:iterate id="tour" name="danhsachtourForm" property="listtour">
+				       
+							
+							<p ><h2 class="w3-text-indigo"><b><bean:write name="tour" property="tenTour"/></b></h2>	</p>
+							<p><image src="images/<bean:write name="tour" property="hinhAnh1"/>" class="img-thumbnail"  />
+							<div class="row" style="text-align:justify;">
+							<div id="noidung">
+							<p class="w3-text-ssgrey"> <html:hidden  styleId="noidungbv"  name="tour" property="moTa"/></p>
+							</div>
+							</div>
+							<div class="row" style="margin-top:30px;">
+							<bean:define id="matour" name="tour" property="matour"></bean:define>
+								
+							<html:form action="/chitiet?matour=${matour}" method="post"  onsubmit="getSoSao()" styleId="fChiTietTour" >
+							<div class="col-lg-12" style="margin-top: -10px">
+								<logic:equal name="danhsachtourForm" property="kiemTraHoatDong"
+									value="true">
+									<logic:equal name="danhsachtourForm" value="1" property="thich">
+										<html:img alt="like" src="images/likebt.png" width="15px"
+											height="15px"
+											style="margin-bottom: 5px; padding-right: 3px;background: none;border: none;"></html:img>
+										<html:submit styleClass="btn btn-primary" property="submit"
+											style="background-color: #0F3D70">
+											<img alt="sdsa" src="">Thích</html:submit>
+	
+										<html:submit styleClass="btn btn-primary" property="submit">Không Thích</html:submit>
+										<html:text property="matour" name="danhsachtourForm"
+											style="display:none">
+											<bean:write name="danhsachtourForm" property="matour" />
+										</html:text>
+									</logic:equal>
+									<logic:equal name="danhsachtourForm" value="1"
+										property="khongThich">
+										<html:img alt="like" src="images/likebt.png" width="15px"
+											height="15px"
+											style="margin-bottom: 5px; padding-right: 3px;background: none;border: none;"></html:img>
+										<html:submit styleClass="btn btn-primary" property="submit">Thích</html:submit>
+										<html:img alt="like" src="images/dislikebt.png" width="15px"
+											height="15px"
+											style=" padding-right: 3px;background: none;border: none;"></html:img>
+										<html:submit styleClass="btn btn-primary" property="submit"
+											style="background-color: #0F3D70">Không Thích</html:submit>
+										<html:text property="matour" name="danhsachtourForm"
+											style="display:none">
+											<bean:write name="danhsachtourForm" property="matour" />
+										</html:text>
+									</logic:equal>
+								</logic:equal>
+								<div class="row" style="margin-top: -10px">
+								
+									<logic:equal name="danhsachtourForm" property="kiemTraHoatDong"
+										value="false">
+										<html:img alt="like" src="images/likebt.png" width="15px"
+											height="15px"
+											style="margin-bottom: 5px; padding-right: 3px;background: none;border: none;"></html:img>
+										<html:submit styleClass="btn btn-primary" property="submit">Thích</html:submit>
+										<html:img alt="like" src="images/dislikebt.png" width="15px"
+											height="15px"
+											style=" padding-right: 3px;background: none;border: none;"></html:img>
+										<html:submit styleClass="btn btn-primary" property="submit">Không Thích</html:submit>
+										<html:text property="matour" name="danhsachtourForm"
+											style="display:none">
+											<bean:write name="danhsachtourForm" property="matour" />
+										</html:text>
+		                                    
+									</logic:equal>
+								</div>
+								<div class="row">
+									<bean:define id="soSao" name="danhsachtourForm" property="soSao"></bean:define>
+									<html:hidden property="soSao" name="danhsachtourForm"
+										styleId="soSao" />
+									<div class="col-sm-6">
+										<input id="rating-input" type="number" class="rating" min=0
+											max=5 step=1 data-size="xs" value="${soSao}" data-rtl="false"
+											data-default-caption="{rating} Sao" data-star-captions="{}">
+									</div>
+									<div style="margin-top:8px;">
+										<html:submit styleClass="btn btn-success" property="submit">Ðánh Giá</html:submit>
+									</div>		
+							     	</div>
+					          </div>
+					 		 <html:textarea rows="5" cols="50" property="noiDungBinhLuan" name="danhsachtourForm" styleClass="form-control"></html:textarea>                                    
+                               <div onclick="document.getElementById('myInput').focus(); return false;">
+                               		<html:submit styleClass="btn btn-success" property="submit" styleId=""  >Bình Lu?n</html:submit>
+                               </div>      
+                                   </html:form>
+                                  
+                                   <div class="row">
+                                      <div class="col-sm-12">
+                                        <div class="col-sm-6" style="float: left">
+                                           <p> Ý Ki?n B?n Ð?c</p>
+                                        </div>
+                                        <html:form action="/chitiet?matour=${matour}">
+                                     <html:submit styleClass="btn btn-success" property="submit">Hàng Ð?u</html:submit>
+                                      <html:submit styleClass="btn btn-success" property="submit">Cu Nh?t</html:submit>
+                                       <html:submit styleClass="btn btn-success" property="submit">T?t C?</html:submit>
+                                      </html:form>
+                                         </div>
+								
+							</div>																												
+			</logic:iterate>
+			</logic:present>
+			
+				<div style="border:5px inset;">
+					<div style="padding:5px 5px 5px 5px;">
+						 <logic:iterate id="maBL" name="danhsachtourForm" property="listBinhLuan">
+						 <p><bean:write name="maBL" property="noiDungBinhLuan"/></p> 
+						 <image src="images/<bean:write name="maBL" property="anh"/>" class="img-thumbnail" style="width:35px" />
+	       				 <bean:write name="maBL" property="maTK"/><hr/>
+	     				        
+	     				                                                                                   
+	           			 </logic:iterate>
+           			 </div>
+           		</div>
+           		 
+			</div>
+
+	      
+		      
+		
+			</div>  
+                        
+			<div style="width:300px;float:right;">
+				<div class="w3-bar w3-green">
+				  	<div class="w3-col l12">
+				  		<button class="w3-bar-item  w3-button" style=""><CENTER>THÔNG TIN</CENTER></button>
+				  	</div>		
+				</div>
+				<div class="w3-row" >
+				<div style="padding:20px 5px 10px 20px;">
+<%-- 					<p class="none">Mã Tour:<b><bean:write name="tour" property="matour"/></b>	</p> --%>
+					<p>Th?i gian: <b><bean:write name="tour" property="thoiGian"/></b>	</p><br/>
+					<p >Phuong ti?n: <b><bean:write name="tour" property="phuongTien"/></b>	</p><br/>
+					<p class="none">Ði?m kh?i hành: <b><bean:write name="tour" property="diemKhoiHanh" /></b>	</p><br/>
+					<p class="none">Hình Th?c: <b><bean:write name="tour" property="hinhThuc"/></b>	</p>
+					<p class="none"><h3 class="none">Giá Tour: <b><td class="col-sm-1 col-md-1 text-center"><strong>
+							<bean:define id="giaTourSau" property="giaTourSau" name="tour"/>
+							<fmt:formatNumber	value="${giaTourSau}" type="number"	maxFractionDigits="0" />
+								</strong>VNÐ</td></b>	</p></h3><br/>
+					<p class="none">L?ch Trình:<b><bean:write name="tour" property="lichTrinh"/></b></p><br/>
+					
+					<html:hidden property="diemKhoiHanh" name="tour" styleId="diemKhoiHanh"/>
+					<html:hidden property="diemDen" name="tour" styleId="diemDen"/>
+					  <div id="floating-panel">
+					    <b>Start: </b>
+					    <input type="text" id="start"/>
+					  
+					  <%--  <html:select styleId="start" property="diemKhoiHanh" name="tour">
+					      <html:option value="">Ch?n Ði?m Kh?i Hành</html:option>
+					    <html:option value="nha trang"></html:option> 
+					    
+					    </html:select>  --%>
+					    <b>End: </b>
+					    <html:select styleId="end" property="diemDen" name="tour">
+					      <html:option value="">Ch?n Ði?m Kh?i Hành</html:option>
+					    <html:option value="Nha Trang">Ch?n Ði?m Kh?i Hành</html:option>
+					    </html:select> 
+					   
+					    <html:select styleId="end" property="diemDen" name="tour">
+					      <html:option value="">Ch?n Ði?m Ð?n</html:option>
+					    <html:option value="H? Chí Minh">Ch?n Ði?m Kh?i Hành</html:option>
+					    </html:select> 
+					    
+					     
+					    </div>
+				
+					
+					<center>
+					
+						<logic:equal value="" property="tenDangNhap" name="danhSachTourDuLichForm">
+							<bean:define id="matour" name="tour" property="matour"></bean:define>
+						<html:form action="/dang-nhap?maTour=${matour}">
+							<button   style="width:240px;height:40px" type="submit" styleClass="w3-button w3-green" class="w3-green w3-hover-green w3-button">Ð?t Tour</button>
+						</html:form>
+				    	</logic:equal>
+				        <logic:notEqual value="" property="tenDangNhap" name="danhSachTourDuLichForm">
+				        <bean:define id="matour" name="tour" property="matour"></bean:define>
+						<html:form action="/dat-tour?maTour=${matour}">
+							<button  style="width:240px;height:40px" type="submit" styleClass="w3-button w3-green" class="w3-green w3-hover-green w3-button">Ð?t Tour</button>
+						</html:form>
+				        </logic:notEqual>
+				        </center>	
+				     
+				   </div>
+				    </div>
+				  </div>
+				</div>
+				   
+			</div>
+		</div>
+	</div>
+		
+	<div class="row">
+		<div class="col-sm-12" style="background: url(images/footer.jpg);height:200px;margin-top:50px;">
+			
+		</div>
+	</div>
+</div>
+	
+</div>
+<logic:equal name="danhsachtourForm" property="goToBottom" value="true">
+		<script type="text/javascript">
+		$(document).ready(function(){
+			$('html, body').scrollTop( $(document).height() );
+		});
+		
+		</script>
+	</logic:equal>
+
+
+	
+</body>
+</html>
